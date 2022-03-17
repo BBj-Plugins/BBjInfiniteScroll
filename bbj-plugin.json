@@ -1,0 +1,26 @@
+{
+  "name": "BBjInfiniteScroll",
+  "version": "0.0.1",
+  "private": false,
+  "description": "BBj Infinite Scrolling made easy 🚀 !",
+  "author": "BASIS Europe Distribution GmbH",
+  "license": "MIT",
+  "homepage": "https://bbj-plugins.github.io/BBjInfiniteScroll",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BBj-Plugins/BBjInfiniteScroll"
+  },
+  "keywords": [
+    "bbj",
+    "dwc",
+    "infinite-scroll"
+  ],
+  "bugs": {
+    "url": "https://github.com/BBj-Plugins/BBjInfiniteScroll/issues"
+  },
+  "bbj_dependency": "22.00",
+  "client": [
+    "DWC"
+  ],
+  "plugin_dependencies": []
+}

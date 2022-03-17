@@ -1,0 +1,349 @@
+rem /**
+rem  * BBjInfiniteScrollPaginater
+rem  *
+rem  * @author Hyyan Abo Fakher
+rem  */
+class public BBjInfiniteScrollPaginater
+  rem /**
+  rem  * The total number of available items
+  rem  */
+  field public BBjNumber TotalItems! = 0
+  rem /**
+  rem  * The current active page
+  rem  */
+  field public BBjNumber CurrentPage! = 1
+  rem /**
+  rem  * The number of items per page
+  rem  */
+  field public BBjNumber PageSize! = 10
+  field protected BBjNumber TotalPages! = 0
+  field protected BBjNumber StartIndex! = 0
+  field protected BBjNumber EndIndex! = 0
+  rem /**
+  rem  * Construct a new BBjInfiniteScrollPaginater
+  rem  */
+  method public BBjInfiniteScrollPaginater()
+    #calculate()
+  methodend
+  rem /**
+  rem  * Set the total number of available items
+  rem  *
+  rem  * @param value! The value
+  rem  */
+  method public void setTotalItems(BBjNumber value!)
+    #TotalItems! = value!
+    #calculate()
+  methodend
+  rem /**
+  rem  * Set the current active page
+  rem  *
+  rem  * @param value! The value
+  rem  */
+  method public void setCurrentPage(BBjNumber value!)
+    #CurrentPage! = value!
+    #calculate()
+  methodend
+  rem /**
+  rem  * Set the number of items per page
+  rem  *
+  rem  * @param value! The value
+  rem  */
+  method public void setPageSize(BBjNumber value!)
+    #PageSize! = value!
+    #calculate()
+  methodend
+  rem /**
+  rem  * Get the number of total pages
+  rem  *
+  rem  * @return The total pages
+  rem  */
+  method public BBjNumber getTotalPages()
+    methodret #TotalPages!
+  methodend
+  rem /**
+  rem  * Get the index of first item
+  rem  *
+  rem  * @return The index
+  rem  */
+  method public BBjNumber getStartIndex()
+    methodret #StartIndex!
+  methodend
+  rem /**
+  rem  * Get the index of last item
+  rem  *
+  rem  * @return The index
+  rem  */
+  method public BBjNumber getEndIndex()
+    methodret #EndIndex!
+  methodend
+
+  method protected void calculate()
+    #TotalPages! = java.lang.Math.ceil(#TotalItems! / #PageSize!)
+
+    if(#CurrentPage! < 1) then
+      #CurrentPage! = 1
+    else
+      if(#CurrentPage! > #TotalPages!)
+        #CurrentPage! = #TotalPages!
+      fi
+    fi
+
+    #StartIndex! = (#CurrentPage! - 1) * #PageSize!
+    #EndIndex! = java.lang.Math.min(#StartIndex! + #PageSize! - 1, #TotalItems! - 1)
+  methodend
+
+classend
+rem /**
+rem  * BBjInfiniteScrollEvent
+rem  *
+rem  * @author Hyyan Abo Fakher
+rem  */
+class public BBjInfiniteScrollEvent
+
+  field protected BBjInfiniteScroll Component!
+  rem /**
+  rem  * Construct a new BBjInfiniteScrollEvent
+  rem  *
+  rem  * @param component! The instance of the BBjInfiniteScroll object
+  rem  */
+  method public BBjInfiniteScrollEvent(BBjInfiniteScroll component!)
+    #Component! = component!
+  methodend
+  rem /**
+  rem  * Get the BBjInfiniteScroll instance
+  rem  *
+  rem  * @return The widget instance
+  rem  */
+  method public BBjInfiniteScroll getWidget()
+    methodret #Component!
+  methodend
+  rem /**
+  rem  * Alias for `BBjInfiniteScrollEvent.getWidget()`
+  rem  *
+  rem  * @return The control instance
+  rem  */
+  method public BBjInfiniteScroll getControl()
+    methodret #getWidget()
+  methodend
+
+classend
+rem /**
+rem  * BBjInfiniteScroll
+rem  *
+rem  * @author Hyyan Abo Fakher
+rem  */
+class public BBjInfiniteScroll
+  rem /**
+  rem  * The refresh icon to use when loading more data.
+  rem  */
+  field public BBjString Icon! = "bbj:animated-spinner"
+  rem /**
+  rem  * The instructions string.
+  rem  */
+  field public BBjString Text! = "Loading data"
+  rem /**
+  rem  * When true , the infinite scroll is completed and there are no more data.
+  rem  * Setting this field won't update the widget automatically, you will need to manually
+  rem  * invoke `BBjInfiniteScroll:update`
+  rem  */
+  field public BBjNumber Completed! = 0
+  field protected BBjString Id! = java.util.UUID.randomUUID().toString()
+  field protected BBjChildWindow Container!
+  field protected BBjChildWindow Canvas!
+  field protected BBjHtmlView HTMLView!
+  rem /**
+  rem  * Construct a new BBjInfiniteScroll component
+  rem  *
+  rem  * @param wnd! The window instance
+  rem  * @param id! The id of the created child window
+  rem  */
+  method public BBjInfiniteScroll(BBjWindow wnd!, BBjNumber id!)
+    #Container! = wnd!.addChildWindow(id!, 0, 0, 0, 0, "", $00108800$, BBjAPI().getSysGui().getAvailableContext())
+    #Container!.setStyle("@element","{""width"":""100%"",""height"":""100%""}")
+    rem force components to load
+    #Container!.addButton(32765,0,0,0,0,"",$0010$)
+    rem The hidden canvas that controls can be attached to
+    #Canvas! = #Container!.addChildWindow(32766, 0, 0, 0, 0, "", $00008810$, BBjAPI().getSysGui().getAvailableContext())
+    #Canvas!.setAttribute("data-canvas", #Id!)
+    rem The HTMLView which handles the commination
+    #HTMLView! = #Container!.addHtmlView(32767, 0, 0, 0, 0, "", $0000$)
+    #HTMLView!.setStyle("@element","{""width"":""100%"",""height"":""100%""}")
+    #HTMLView!.setOpaque(0)
+    #HTMLView!.setNoEdge(1)
+    #HTMLView!.setTabTraversable(0)
+    #HTMLView!.setFocusable(0)
+    #HTMLView!.setAttribute("data-hv", #Id!)
+    #HTMLView!.setText("<bbj-infinite-scroll></bbj-infinite-scroll>")
+    #HTMLView!.setCallback(BBjAPI.ON_NATIVE_JAVASCRIPT, #this!, "handleJavascriptEvents")
+    script! = "" +
+:    "(() => {" +
+:    " const hv = document.querySelector('[data-hv=""" + #getUUID() + """]');" +
+:    " hv.__is = hv.querySelector('bbj-infinite-scroll');" +
+:    " hv.__canvas = document.querySelector('[data-canvas=""" + #getUUID() + """]');" +
+:    " if(!hv.__is['__callbackRegistered']){" +
+:    "   hv.__is['__callbackRegistered'] = true;" +
+:    "   hv.__is.addEventListener('bbj-infinite', ev => {" +
+:    "     if(!hv.basisDispatchCustomEvent) return;" +
+:    "     hv.basisDispatchCustomEvent(hv, {type:'bbj-infinite', detail: ''});" +
+:    "   });" +
+:    " };" +
+:    "})()"
+    #HTMLView!.executeScript(script!)
+  methodend
+  rem /**
+  rem  * Construct a new BBjInfiniteScroll component
+  rem  *
+  rem  * @param wnd! The window instance
+  rem  */
+  method public BBjInfiniteScroll(BBjWindow wnd!)
+    #this!(wnd!, wnd!.getAvailableControlID())
+  methodend
+  rem /**
+  rem  * Get the unique auto generated id of the component.
+  rem  *
+  rem  * @return BBjString
+  rem  */
+  method public BBjString getUUID()
+    methodret #Id!
+  methodend
+  rem /**
+  rem  * Get the canvas's id
+  rem  *
+  rem  * @return BBjNumber
+  rem  */
+  method public BBjNumber getID()
+    methodret #getCanvas().getID()
+  methodend
+  rem /**
+  rem  * Get the instance of the component's Canvas
+  rem  *
+  rem  * @return The canvas's instance
+  rem  */
+  method public BBjChildWindow getCanvas()
+    methodret #Canvas!
+  methodend
+  rem /**
+  rem  * Set the refresh icon to use when loading more data.
+  rem  *
+  rem  * Icons can in any of the following formats:
+  rem  *
+  rem  * <ol>
+  rem  *  <li> <b>URL</b>: (ex: /path/to/image.png)
+  rem  *  <li> <b>Data URL</b>: (ex: data:image/jpeg;base64,/9j/4SDpRXhpZgAAT....)
+  rem  *  <li> <b>ICON_NAME</b>: An icon to load from the default BBj icons pool. (ex: `arrow`)
+  rem  *  <li> <b>POOL_NAME:ICON_NAME</b>: An icon to load from the passed pool. (ex: `feather:arrow`)
+  rem  * </ol>
+  rem  *
+  rem  * @param icon! The icon string
+  rem  */
+  method public void setIcon(BBjString icon!)
+    #setAttribute("icon", icon!)
+  methodend
+  rem /**
+  rem  * Set the instructions string.
+  rem  *
+  rem  * @param value! The pull text
+  rem  */
+  method public void setText(BBjString value!)
+    #setAttribute("text", value!)
+  methodend
+  rem /**
+  rem  * Set a widget attribute
+  rem  *
+  rem  * @param key! The attribute's name
+  rem  * @param value! The attribute's value
+  rem  */
+  method public void setAttribute(BBjString key!, BBjString value!)
+    script! = "" +
+:    "(() => {" +
+:    " const hv = document.querySelector('[data-hv=""" + #getUUID() + """]');" +
+:    " hv.__is.setAttribute('" + str(key!) + "','" + str(value!) + "');" +
+:    "})()"
+    #getHTMLView().executeAsyncScript(script!)
+  methodend
+  rem /**
+  rem  * Get a widget attribute
+  rem  *
+  rem  * @param key! The attribute's name
+  rem  */
+  method public BBjString getAttribute(BBjString key!)
+    script! = "" +
+:    "(() => {" +
+:    " const hv = document.querySelector('[data-hv=""" + #getUUID() + """]');" +
+:    " return hv.__is.getAttribute('" + str(key!) + "');" +
+:    "})()"
+    methodret str(#getHTMLView().executeScript(script!))
+  methodend
+  rem /**
+  rem  * Update the canvas
+  rem  *
+  rem  * Every time the canvas is changed in BBj , this method should be called to
+  rem  * update the client view
+  rem  */
+  method public void update()
+    script! = "" +
+:    "(async () => {" +
+:    " await customElements.whenDefined('bbj-infinite-scroll');" +
+:    " const hv = document.querySelector('[data-hv=""" + #getUUID() + """]');" +
+:    " hv.__is.completed = Boolean(" + str(#getCompleted()) + ");"+
+:    " hv.__is.append(...hv.__canvas.childNodes);" +
+:    " await hv.__is.update()" +
+:    "})()"
+    #getHTMLView().executeScript(script!)
+  methodend
+  rem /**
+  rem  * Set a scroll callback
+  rem  *
+  rem  * The callback will be invoked every time the user asks for more data by scrolling
+  rem  *
+  rem  * @param callback! The event callback
+  rem  */
+  method public void onScroll(String callback!)
+    BBjAPI().setCustomEventCallback(#getScopedEventName("bbj-infinite"), callback!)
+  methodend
+  rem /**
+  rem  * Set a scroll callback
+  rem  *
+  rem  * The callback will be invoked every time the user asks for more data by scrolling
+  rem  *
+  rem  * @param callback! A class instance
+  rem  * @param callback! The event method
+  rem  */
+  method public void onScroll(CustomObject instance!, String method!)
+    BBjAPI().setCustomEventCallback(#getScopedEventName("bbj-infinite"), instance!, method!)
+  methodend
+  rem /**
+  rem  * Clear the scroll callback
+  rem  */
+  method public void clearScrollCallback()
+    BBjAPI().clearCustomEventCallback(#getScopedEventName("bbj-infinite"))
+  methodend
+  rem /**
+  rem  * Scope the given event name to the current instance
+  rem  *
+  rem  * @param name! The event name
+  rem  *
+  rem  * @return The scooped event name
+  rem  */
+  method protected BBjString getScopedEventName(BBjString name!)
+    methodret str(#this!)+ name!
+  methodend
+  rem /**
+  rem  * Handle the BBjInfiniteScroll client events.
+  rem  *
+  rem  * <b>IMPORTANT</b> This method is not meant to be part of the public API of the widget.
+  rem  * @param ev! The Javascript event
+  rem  *
+  rem  * @ignore
+  rem  */
+  method public void handleJavascriptEvents(BBjNativeJavaScriptEvent ev!)
+    map! = ev!.getEventMap()
+    type$ = str(map!.get("type"))
+    payload! = new BBjInfiniteScrollEvent(#this!)
+
+    if(type$ = "bbj-infinite") then
+      BBjAPI().postPriorityCustomEvent(#getScopedEventName("bbj-infinite"), payload!)
+    fi
+  methodend
+
+classend
