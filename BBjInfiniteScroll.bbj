@@ -188,7 +188,7 @@ class public BBjInfiniteScroll
 :    "   });" +
 :    " };" +
 :    "})()"
-    #HTMLView!.executeScript(script!)
+    #HTMLView!.executeAsyncScript(script!)
   methodend
   rem /**
   rem  * Construct a new BBjInfiniteScroll component
@@ -289,7 +289,7 @@ class public BBjInfiniteScroll
 :    " hv.__is.append(...hv.__canvas.childNodes);" +
 :    " await hv.__is.update()" +
 :    "})()"
-    #getHTMLView().executeScript(script!)
+    #getHTMLView().executeAsyncScript(script!)
   methodend
   rem /**
   rem  * Set a scroll callback
