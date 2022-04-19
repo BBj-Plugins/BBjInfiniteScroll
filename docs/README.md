@@ -23,7 +23,7 @@ BBjInfiniteScroll lets a user loads content continuously as the user scrolls dow
 
 - Easy to set up
 - Easy to customize
-- Provide a paginater helper to paginate the data
+- Provide a paginator helper to paginate the data
 
 And much more !
 
@@ -116,7 +116,7 @@ BBjInfiniteScroll exposes only one event `onScroll`. You can listen to the `onSc
 BBjInfiniteScroll ships a helper class `BBjInfiniteScrollPaginator` which can help you paginate your data. 
 
 With `BBjInfiniteScrollPaginator` you set the total amount of the items
-and number of items per page , then the paginater provides you with the:
+and number of items per page , then the paginator provides you with the:
 
 - **StartIndex**: The index of the first item
 - **EndIndex**: The index of the last item
@@ -137,19 +137,19 @@ wnd!.setCallback(BBjAPI.ON_CLOSE,"eoj")
 infiniteScroll! = new BBjInfiniteScroll(wnd!)
 infiniteScroll!.onScroll("onScroll")
 
-paginater! = new BBjInfiniteScrollPaginator()
-paginater!.setTotalItems(60)
-paginater!.setPageSize(20)
+paginator! = new BBjInfiniteScrollPaginator()
+paginator!.setTotalItems(60)
+paginator!.setPageSize(20)
 
 canvas! = infiniteScroll!.getCanvas()
 
 process_events
 
 onScroll:
-  startIndex! = paginater!.getStartIndex()
-  endIndex! = paginater!.getEndIndex()
+  startIndex! = paginator!.getStartIndex()
+  endIndex! = paginator!.getEndIndex()
 
-  if(paginater!.getEndIndex() > -1)
+  if(paginator!.getEndIndex() > -1)
     for i = startIndex! to endIndex!
       container! = canvas!.addChildWindow(canvas!.getAvailableControlID(), 0, 0, 0, 0, "", $00108800$, BBjAPI().getSysGui().getAvailableContext())
       container!.setStyle("padding", "var(--bbj-space-xs) var(--bbj-space-s)")
@@ -157,11 +157,11 @@ onScroll:
       container!.addStaticText(canvas!.getAvailableControlID(),0,0,0,0, str(i) + " - Static Text" ,$0000$)
     next i
 
-    currentPage! = paginater!.getCurrentPage()
-    paginater!.setCurrentPage(currentPage! + 1)
+    currentPage! = paginator!.getCurrentPage()
+    paginator!.setCurrentPage(currentPage! + 1)
   fi
 
-  if(endIndex! < 0 or endIndex! = (paginater!.getTotalItems() -1))
+  if(endIndex! < 0 or endIndex! = (paginator!.getTotalItems() -1))
     infiniteScroll!.setCompleted(1)
   fi
 
@@ -174,7 +174,7 @@ release
 
 <br><br>
 <div style="text-align: center;">
-  <img style="border:thin solid var(--bbj-color-default);" src="assets/paginater.gif" alt="BBjInfiniteScrollPaginator">
+  <img style="border:thin solid var(--bbj-color-default);" src="assets/paginator.gif" alt="BBjInfiniteScrollPaginator">
 </div>
 <br><br>
 
@@ -282,18 +282,18 @@ pullToRefresh! = new BBjPullToRefresh(infiniteScrollCanvas!, BBjPullToRefresh.PR
 pullToRefresh!.onRefresh("onRefresh")
 
 query! = "select count(*) as COUNT FROM CUSTOMER"
-paginater! = new BBjInfiniteScrollPaginator()
-paginater!.setTotalItems(sql!.retrieve(query!).getItem(0).getField("COUNT").getBigDecimal())
-paginater!.setPageSize(10)
+paginator! = new BBjInfiniteScrollPaginator()
+paginator!.setTotalItems(sql!.retrieve(query!).getItem(0).getField("COUNT").getBigDecimal())
+paginator!.setPageSize(10)
 
 process_events
 
 onScroll:
-    startIndex! = paginater!.getStartIndex()
-    endIndex! = paginater!.getEndIndex()
+    startIndex! = paginator!.getStartIndex()
+    endIndex! = paginator!.getEndIndex()
 
-    if(paginater!.getEndIndex() > -1)
-      query! = "SELECT * FROM CUSTOMER limit " + str(startIndex! + 1) + "," + str(endIndex! + 1)
+    if(paginator!.getEndIndex() > -1)
+      query! = "SELECT * FROM CUSTOMER limit " + str(startIndex! + 1) + "," +  str(paginator!.getPageSize())
       items! = sql!.retrieve(query!)
       iterator! = items!.iterator()
 
@@ -329,11 +329,11 @@ onScroll:
           call!.setCallback(call!.ON_BUTTON_PUSH, "onCall")
       wend
 
-      currentPage! = paginater!.getCurrentPage()
-      paginater!.setCurrentPage(currentPage! + 1)
+      currentPage! = paginator!.getCurrentPage()
+      paginator!.setCurrentPage(currentPage! + 1)
     fi
 
-    if(endIndex! < 0 or endIndex! = (paginater!.getTotalItems() -1))
+    if(endIndex! < 0 or endIndex! = (paginator!.getTotalItems() -1))
       infiniteScroll!.setCompleted(1)
     fi
 
@@ -354,7 +354,7 @@ onRefresh:
   next i
 
   pullToRefresh!.finish()
-  paginater!.setCurrentPage(1)
+  paginator!.setCurrentPage(1)
   infiniteScroll!.setCompleted(0)
   infiniteScroll!.update()
 return

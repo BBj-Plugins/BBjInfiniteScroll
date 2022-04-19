@@ -25,7 +25,7 @@ BBjInfiniteScroll lets a user loads content continuously as the user scrolls dow
 
 - Easy to set up
 - Easy to customize
-- Provide a paginater helper to paginate the data
+- Provide a paginator helper to paginate the data
 
 ## Documentation
 
