@@ -113,23 +113,23 @@ BBjInfiniteScroll exposes only one event `onScroll`. You can listen to the `onSc
 
 ## Pagination 
 
-BBjInfiniteScroll ships a helper class `BBjInfiniteScrollPaginater` which can help you paginate your data. 
+BBjInfiniteScroll ships a helper class `BBjInfiniteScrollPaginator` which can help you paginate your data. 
 
-With `BBjInfiniteScrollPaginater` you set the total amount of the items
+With `BBjInfiniteScrollPaginator` you set the total amount of the items
 and number of items per page , then the paginater provides you with the:
 
 - **StartIndex**: The index of the first item
 - **EndIndex**: The index of the last item
 - **TotalPages** : The number of available pages
 
-You can navigate throw pages by setting the currentPage with the method `BBjInfiniteScrollPaginater.setCurrentPage`
+You can navigate throw pages by setting the currentPage with the method `BBjInfiniteScrollPaginator.setCurrentPage`
 
 
 ?> **Note:** In the following sample, notice how we are using the `setCompleted` method to mark the end of infinite scrolling. Invoking this method won't update the canvas automatically , you still need to invoke `update` to update the canvas.
 
 ```BBj
 use ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScroll
-use ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScrollPaginater
+use ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScrollPaginator
 
 wnd! = BBjAPI().openSysGui("X0").addWindow(10,10,300,400,"BBjInfiniteScroll")
 wnd!.setCallback(BBjAPI.ON_CLOSE,"eoj")
@@ -137,7 +137,7 @@ wnd!.setCallback(BBjAPI.ON_CLOSE,"eoj")
 infiniteScroll! = new BBjInfiniteScroll(wnd!)
 infiniteScroll!.onScroll("onScroll")
 
-paginater! = new BBjInfiniteScrollPaginater()
+paginater! = new BBjInfiniteScrollPaginator()
 paginater!.setTotalItems(60)
 paginater!.setPageSize(20)
 
@@ -174,7 +174,7 @@ release
 
 <br><br>
 <div style="text-align: center;">
-  <img style="border:thin solid var(--bbj-color-default);" src="assets/paginater.gif" alt="BBjInfiniteScrollPaginater">
+  <img style="border:thin solid var(--bbj-color-default);" src="assets/paginater.gif" alt="BBjInfiniteScrollPaginator">
 </div>
 <br><br>
 
@@ -258,7 +258,7 @@ infinity scrolling and pull to refresh.
 
 ```BBj
 use ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScroll
-use ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScrollPaginater
+use ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScrollPaginator
 use ::BBjPullToRefresh/BBjPullToRefresh.bbj::BBjPullToRefresh
 use com.basiscomponents.db.ResultSet
 use com.basiscomponents.bc.SqlQueryBC
@@ -282,7 +282,7 @@ pullToRefresh! = new BBjPullToRefresh(infiniteScrollCanvas!, BBjPullToRefresh.PR
 pullToRefresh!.onRefresh("onRefresh")
 
 query! = "select count(*) as COUNT FROM CUSTOMER"
-paginater! = new BBjInfiniteScrollPaginater()
+paginater! = new BBjInfiniteScrollPaginator()
 paginater!.setTotalItems(sql!.retrieve(query!).getItem(0).getField("COUNT").getBigDecimal())
 paginater!.setPageSize(10)
 

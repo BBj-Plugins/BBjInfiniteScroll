@@ -1,9 +1,9 @@
 rem /**
-rem  * BBjInfiniteScrollPaginater
+rem  * BBjInfiniteScrollPaginator
 rem  *
 rem  * @author Hyyan Abo Fakher
 rem  */
-class public BBjInfiniteScrollPaginater
+class public BBjInfiniteScrollPaginator
   rem /**
   rem  * The total number of available items
   rem  */
@@ -20,9 +20,9 @@ class public BBjInfiniteScrollPaginater
   field protected BBjNumber StartIndex! = 0
   field protected BBjNumber EndIndex! = 0
   rem /**
-  rem  * Construct a new BBjInfiniteScrollPaginater
+  rem  * Construct a new BBjInfiniteScrollPaginator
   rem  */
-  method public BBjInfiniteScrollPaginater()
+  method public BBjInfiniteScrollPaginator()
     #calculate()
   methodend
   rem /**
