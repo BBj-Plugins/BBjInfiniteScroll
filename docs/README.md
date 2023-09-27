@@ -35,8 +35,8 @@ And much more !
 ## The gist
 
 ```BBj
-use ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScroll
-use ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScrollEvent
+USE ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScroll
+USE ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScrollEvent
 
 wnd! = BBjAPI().openSysGui("X0").addWindow(10,10,300,400,"BBjInfiniteScroll")
 wnd!.setCallback(BBjAPI.ON_CLOSE,"eoj")
@@ -46,32 +46,33 @@ infiniteScroll!.onScroll("onScroll")
 
 lastIndex! = 0
 
-process_events
+PROCESS_EVENTS
 
 onScroll:
-  declare auto BBjInfiniteScrollEvent payload!
+  declare AUTO BBjInfiniteScrollEvent payload!
 
   ev! = BBjAPI().getLastEvent()
   payload! = ev!.getObject()
+
   control! = payload!.getControl()
   canvas! = control!.getCanvas()
+
   startIndex! =  lastIndex!
   endIndex! = lastIndex! + 20
 
-  for i = startIndex! to endIndex! 
-    container! = canvas!.addChildWindow(canvas!.getAvailableControlID(), 0, 0, 0, 0, "", $00108800$, BBjAPI().getSysGui().getAvailableContext())
+  FOR i = startIndex! to endIndex!
+    container! = canvas!.addChildWindow("", $00108800$, BBjAPI().getSysGui().getAvailableContext())
     container!.setStyle("padding", "var(--bbj-space-xs) var(--bbj-space-s)")
     container!.setAttribute("data-index", str(i))
-    container!.addStaticText(canvas!.getAvailableControlID(),0,0,0,0, str(i) + " - Static Text" ,$0000$)
-
+    container!.addStaticText( str(i) + " - Static Text" ,$0000$)
     lastIndex! = lastIndex! + 1
-  next 
+  NEXT
 
   control!.update()
-return
+RETURN
 
 eoj:
-release
+RELEASE
 ```
 
 <br><br>
@@ -128,8 +129,8 @@ You can navigate throw pages by setting the currentPage with the method `BBjInfi
 ?> **Note:** In the following sample, notice how we are using the `setCompleted` method to mark the end of infinite scrolling. Invoking this method won't update the canvas automatically , you still need to invoke `update` to update the canvas.
 
 ```BBj
-use ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScroll
-use ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScrollPaginator
+USE ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScroll
+USE ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScrollPaginator
 
 wnd! = BBjAPI().openSysGui("X0").addWindow(10,10,300,400,"BBjInfiniteScroll")
 wnd!.setCallback(BBjAPI.ON_CLOSE,"eoj")
@@ -143,38 +144,38 @@ paginator!.setPageSize(20)
 
 canvas! = infiniteScroll!.getCanvas()
 
-process_events
+PROCESS_EVENTS
 
 onScroll:
   startIndex! = paginator!.getStartIndex()
   endIndex! = paginator!.getEndIndex()
 
-  if(paginator!.getEndIndex() > -1)
-    for i = startIndex! to endIndex!
-      container! = canvas!.addChildWindow(canvas!.getAvailableControlID(), 0, 0, 0, 0, "", $00108800$, BBjAPI().getSysGui().getAvailableContext())
+  IF(paginator!.getEndIndex() > -1)
+    FOR i = startIndex! to endIndex!
+      container! = canvas!.addChildWindow("", $00108800$, BBjAPI().getSysGui().getAvailableContext())
       container!.setStyle("padding", "var(--bbj-space-xs) var(--bbj-space-s)")
       container!.setAttribute("data-index", str(i))
-      container!.addStaticText(canvas!.getAvailableControlID(),0,0,0,0, str(i) + " - Static Text" ,$0000$)
-    next i
+      container!.addStaticText(str(i) + " - Static Text" ,$0000$)
+    NEXT i
 
     currentPage! = paginator!.getCurrentPage()
     paginator!.setCurrentPage(currentPage! + 1)
-  fi
+  FI
 
-  if(endIndex! < 0 or endIndex! = (paginator!.getTotalItems() -1))
+  IF(endIndex! < 0 OR endIndex! = (paginator!.getTotalItems() -1))
     infiniteScroll!.setCompleted(1)
-  fi
+  FI
 
   infiniteScroll!.update()
-return
+RETURN
 
 eoj:
-release
+RELEASE
 ```
 
 <br><br>
 <div style="text-align: center;">
-  <img style="border:thin solid var(--bbj-color-default);" src="assets/paginator.gif" alt="BBjInfiniteScrollPaginator">
+  <img style="border:thin solid var(--bbj-color-default);" src="assets/paginater.gif" alt="BBjInfiniteScrollPaginator">
 </div>
 <br><br>
 
@@ -187,8 +188,8 @@ The [BBjPullToRefresh](https://bbj-plugins.github.io/BBjPullToRefresh/#/) widget
 
 
 ```BBj
-use ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScroll
-use ::BBjPullToRefresh/BBjPullToRefresh.bbj::BBjPullToRefresh
+USE ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScroll
+USE ::BBjPullToRefresh/BBjPullToRefresh.bbj::BBjPullToRefresh
 
 wnd! = BBjAPI().openSysGui("X0").addWindow(10,10,300,400,"BBjInfiniteScroll")
 wnd!.setCallback(BBjAPI.ON_CLOSE,"eoj")
@@ -201,48 +202,46 @@ pullToRefresh!.onRefresh("onRefresh")
 
 lastIndex! = 0
 
-process_events
+PROCESS_EVENTS
 
 onScroll:
   canvas! = infiniteScroll!.getCanvas()
   startIndex! =  lastIndex!
   endIndex! = lastIndex! + 20
 
-  for i = startIndex! to endIndex! 
-    container! = canvas!.addChildWindow(canvas!.getAvailableControlID(), 0, 0, 0, 0, "", $00108800$, BBjAPI().getSysGui().getAvailableContext())
+  FOR i = startIndex! to endIndex!
+    container! = canvas!.addChildWindow("", $00108800$, BBjAPI().getSysGui().getAvailableContext())
     container!.setStyle("padding", "var(--bbj-space-xs) var(--bbj-space-s)")
     container!.setAttribute("data-index", str(i))
-    container!.addStaticText(canvas!.getAvailableControlID(),0,0,0,0, str(i) + " - Static Text" ,$0000$)
+    container!.addStaticText(str(i) + " - Static Text" ,$0000$)
     lastIndex! = lastIndex! + 1
-  next 
+  NEXT
 
   infiniteScroll!.update()
-return
+RETURN
 
 onRefresh:
   lastIndex! = 0
-
   infiniteScroll!.setCompleted(1)
   infiniteScroll!.update()
-
   controls! = infiniteScroll!.getCanvas().getAllControls()
   size! = controls!.size() - 1
-  for i = 0 to size!
+
+  FOR i = 0 to size!
     control! = controls!.get(i)
 
-    if(control!.getID() <> pullToRefresh!.getID())
+    IF(control!.getID() <> pullToRefresh!.getID())
       control!.destroy()
-    fi
-  next i
+    FI
+  NEXT i
 
   pullToRefresh!.finish()
-
   infiniteScroll!.setCompleted(0)
   infiniteScroll!.update()
-return
+RETURN
 
 eoj:
-release
+RELEASE
 ```
 <br><br>
 <div style="text-align: center;">
@@ -257,22 +256,22 @@ The following sample , uses the ChileCompany customers table to build a paginate
 infinity scrolling and pull to refresh.
 
 ```BBj
-use ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScroll
-use ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScrollPaginator
-use ::BBjPullToRefresh/BBjPullToRefresh.bbj::BBjPullToRefresh
-use com.basiscomponents.db.ResultSet
-use com.basiscomponents.bc.SqlQueryBC
-use java.nio.file.Files
-use java.nio.file.Paths
+USE ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScroll
+USE ::BBjInfiniteScroll/BBjInfiniteScroll.bbj::BBjInfiniteScrollPaginator
+USE ::BBjPullToRefresh/BBjPullToRefresh.bbj::BBjPullToRefresh
+USE com.basiscomponents.db.ResultSet
+USE com.basiscomponents.bc.SqlQueryBC
+USE java.nio.file.Files
+USE java.nio.file.Paths
 
-wnd! = BBjAPI().openSysGui("X0").addWindow(10,10,300,400,"ChileCompany ContactsList")
 fs! = BBjAPI().getFileSystem()
 css! = new String(Files.readAllBytes(Paths.get(fs!.resolvePath("./ContactsList.css"))))
-wnd!.setAttribute("@app-style-bottom", css!)
 
+web! = BBjAPI().getWebManager()
+web!.injectStyle(css!, 0)
+
+wnd! = BBjAPI().openSysGui("X0").addWindow(10,10,300,400,"ChileCompany ContactsList")
 wnd!.setCallback(BBjAPI.ON_CLOSE,"eoj")
-
-sql! = new SqlQueryBC(BBjAPI().getJDBCConnection("ChileCompany"))
 
 infiniteScroll! = new BBjInfiniteScroll(wnd!)
 infiniteScroll!.onScroll("onScroll")
@@ -281,102 +280,105 @@ infiniteScrollCanvas! = infiniteScroll!.getCanvas()
 pullToRefresh! = new BBjPullToRefresh(infiniteScrollCanvas!, BBjPullToRefresh.PREPEND_SELF)
 pullToRefresh!.onRefresh("onRefresh")
 
+sql! = new SqlQueryBC(BBjAPI().getJDBCConnection("ChileCompany"))
 query! = "select count(*) as COUNT FROM CUSTOMER"
+
 paginator! = new BBjInfiniteScrollPaginator()
 paginator!.setTotalItems(sql!.retrieve(query!).getItem(0).getField("COUNT").getBigDecimal())
 paginator!.setPageSize(10)
 
-process_events
+PROCESS_EVENTS
 
 onScroll:
-    startIndex! = paginator!.getStartIndex()
-    endIndex! = paginator!.getEndIndex()
+  startIndex! = paginator!.getStartIndex()
+  endIndex! = paginator!.getEndIndex()
 
-    if(paginator!.getEndIndex() > -1)
-      query! = "SELECT * FROM CUSTOMER limit " + str(startIndex! + 1) + "," +  str(paginator!.getPageSize())
-      items! = sql!.retrieve(query!)
-      iterator! = items!.iterator()
+  IF(paginator!.getEndIndex() > -1)
+    query! = "SELECT * FROM CUSTOMER limit " + str(startIndex! + 1) + "," +  str(paginator!.getPageSize())
+    items! = sql!.retrieve(query!)
+    iterator! = items!.iterator()
 
-      while iterator!.hasNext()
-          item! = iterator!.next()
-          firstName! = item!.getField("FIRST_NAME").getString().trim()
-          lastName! = item!.getField("LAST_NAME").getString().trim()
-          fullName! = firstName! + " " + lastName!
-          phone! = item!.getField("PHONE").getString().trim()
-          country! = item!.getField("COUNTRY").getString().trim()
-          city! = item!.getField("CITY").getString().trim()
-          fullLocation! = country! + " - " + city!
+    WHILE iterator!.hasNext()
+      item! = iterator!.next()
+      firstName! = item!.getField("FIRST_NAME").getString().trim()
+      lastName! = item!.getField("LAST_NAME").getString().trim()
+      fullName! = firstName! + " " + lastName!
+      phone! = item!.getField("PHONE").getString().trim()
+      country! = item!.getField("COUNTRY").getString().trim()
+      city! = item!.getField("CITY").getString().trim()
+      fullLocation! = country! + " - " + city!
 
-          card! = infiniteScrollCanvas!.addChildWindow(infiniteScrollCanvas!.getAvailableControlID(), 0, 0, 0, 0, "", $00108800$, BBjAPI().getSysGui().getAvailableContext())
-          card!.addStyle("bookEntry")
+      card! = infiniteScrollCanvas!.addChildWindow("", $00108800$, BBjAPI().getSysGui().getAvailableContext())
+      card!.addStyle("bookEntry")
 
-          avatarContent! = "<html><img src=""https://ui-avatars.com/api/?name=" + fullName! + "&&background=random"" /></html>"
-          avatar! = card!.addStaticText(card!.getAvailableControlID(), 0, 0, 0, 0, avatarContent!)
-          avatar!.addStyle("bookEntry__avatar")
+      avatarContent! = "<html><img src=""https://ui-avatars.com/api/?name=" + fullName! + "&&background=random"" /></html>"
+      avatar! = card!.addStaticText(avatarContent!)
 
-          info! = card!.addChildWindow(card!.getAvailableControlID(), 0, 0, 0, 0, "", $00108800$, BBjAPI().getSysGui().getAvailableContext())
-          info!.addStyle("bookEntry__info")
+      avatar!.addStyle("bookEntry__avatar")
+      info! = card!.addChildWindow("", $00108800$, BBjAPI().getSysGui().getAvailableContext())
+      info!.addStyle("bookEntry__info")
 
-          name! = info!.addStaticText(info!.getAvailableControlID(), 0, 0, 0, 0, fullName!)
-          name!.addStyle("bookEntry__name")
+      name! = info!.addStaticText(fullName!)
+      name!.addStyle("bookEntry__name")
 
-          location! = info!.addStaticText(info!.getAvailableControlID(), 0, 0, 0, 0, fullLocation!)
-          location!.addStyle("bookEntry__location")
+      location! = info!.addStaticText(fullLocation!)
+      location!.addStyle("bookEntry__location")
 
-          call! = card!.addButton(card!.getAvailableControlID(), 0, 0, 0, 0, "<html><bbj-icon name=""phone""></bbj-icon></html>")
-          call!.setEnabled(len(phone!) > 0)
-          call!.setUserData(phone!)
-          call!.setCallback(call!.ON_BUTTON_PUSH, "onCall")
-      wend
+      call! = card!.addButton("<html><bbj-icon name=""phone""></bbj-icon></html>")
+      call!.setEnabled(len(phone!) > 0)
+      call!.setUserData(phone!)
+      call!.setCallback(call!.ON_BUTTON_PUSH, "onCall")
+    WEND
 
-      currentPage! = paginator!.getCurrentPage()
-      paginator!.setCurrentPage(currentPage! + 1)
-    fi
+    currentPage! = paginator!.getCurrentPage()
+    paginator!.setCurrentPage(currentPage! + 1)
+  FI
 
-    if(endIndex! < 0 or endIndex! = (paginator!.getTotalItems() -1))
-      infiniteScroll!.setCompleted(1)
-    fi
+  IF(endIndex! < 0 OR endIndex! = (paginator!.getTotalItems() -1))
+    infiniteScroll!.setCompleted(1)
+  FI
 
-    infiniteScroll!.update()
-return
+  infiniteScroll!.update()
+RETURN
 
 onRefresh:
   infiniteScroll!.setCompleted(1)
   infiniteScroll!.update()
-
   controls! = infiniteScrollCanvas!.getAllControls()
   size! = controls!.size() - 1
-  for i = 0 to size!
+
+  FOR i = 0 to size!
     control! = controls!.get(i)
-    if(control!.getID() <> pullToRefresh!.getID())
+
+    IF(control!.getID() <> pullToRefresh!.getID())
       control!.destroy()
-    fi
-  next i
+    FI
+  NEXT i
 
   pullToRefresh!.finish()
   paginator!.setCurrentPage(1)
   infiniteScroll!.setCompleted(0)
   infiniteScroll!.update()
-return
+RETURN
 
 onCall:
   ev! = BBjAPI().getLastEvent()
   control! = ev!.getControl()
   phone! = str(control!.getUserData())
   script! = "" +
-:    "(() => {" +
-:    " const link = document.createElement('a');" +
-:    " link.href='tel:" + phone! + "';" +
-:    " link.style.visibility='hidden';" +
-:    " document.body.appendChild(link);" +
-:    " link.click();" +
-:    " document.body.removeChild(link)" +
-:    "})()"
-  BBjAPI().getSysGui().executeScript(script!)
-return
+: "(() => {" +
+: " const link = document.createElement('a');" +
+: " link.href='tel:" + phone! + "';" +
+: " link.style.visibility='hidden';" +
+: " document.body.appendChild(link);" +
+: " link.click();" +
+: " document.body.removeChild(link)" +
+: "})()"
+  web!.executeScript(script!)
+RETURN
 
 eoj:
-release
+RELEASE
 ```
 
 ```css
@@ -388,8 +390,7 @@ release
   padding: var(--bbj-space-s);
   cursor: var(--bbj-cursor-click);
   transition: background-color var(--bbj-transition);
-  border-bottom: thin solid var(--bbj-color-default);
-  border-style: solid !important; 
+  border-bottom: thin solid var(--bbj-color-default) !important;
 }
 
 .bookEntry:hover {
