@@ -1,6 +1,6 @@
 {
   "name": "BBjInfiniteScroll",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": false,
   "description": "BBj Infinite Scrolling made easy 🚀 !",
   "author": "BASIS Europe Distribution GmbH",
@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/BBj-Plugins/BBjInfiniteScroll/issues"
   },
-  "bbj_dependency": "22.00",
+  "bbj_dependency": "24.00",
   "client": [
     "DWC"
   ],
