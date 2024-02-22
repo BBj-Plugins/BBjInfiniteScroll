@@ -10,8 +10,8 @@
   <a href="https://github.com/necolas/issue-guidelines/blob/master/CONTRIBUTING.md#pull-requests">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs welcome!" />
   </a>
-   <a href="https://basishub.github.io/basis-next/#/dwc/bbj-infinite-scroll">
-    <img src="https://img.shields.io/badge/Component-bbj--infinite--scroll-%23006aff" alt="Tag Name">
+   <a href="https://basishub.github.io/basis-next/#/dwc/dwc-infinite-scroll">
+    <img src="https://img.shields.io/badge/Component-dwc--infinite--scroll-%23006aff" alt="Tag Name">
   </a>
 </p>
 
@@ -62,7 +62,7 @@ onScroll:
 
   FOR i = startIndex! to endIndex!
     container! = canvas!.addChildWindow("", $00108800$, BBjAPI().getSysGui().getAvailableContext())
-    container!.setStyle("padding", "var(--bbj-space-xs) var(--bbj-space-s)")
+    container!.setStyle("padding", "var(--dwc-space-xs) var(--dwc-space-s)")
     container!.setAttribute("data-index", str(i))
     container!.addStaticText( str(i) + " - Static Text" ,$0000$)
     lastIndex! = lastIndex! + 1
@@ -77,7 +77,7 @@ RELEASE
 
 <br><br>
 <div style="text-align: center;">
-  <img style="border:thin solid var(--bbj-color-default);" src="assets/gist.gif" alt="BBjInfiniteScroll gist">
+  <img style="border:thin solid var(--dwc-color-default);" src="assets/gist.gif" alt="BBjInfiniteScroll gist">
 </div>
 <br><br>
 
@@ -104,7 +104,7 @@ infiniteScroll!.setIcon("https://cdnjs.cloudflare.com/ajax/libs/timelinejs/2.25/
 
 <br><br>
 <div style="text-align: center;">
-  <img style="border:thin solid var(--bbj-color-default);" src="assets/text-and-icons.gif" alt="BBjInfiniteScroll text and icons">
+  <img style="border:thin solid var(--dwc-color-default);" src="assets/text-and-icons.gif" alt="BBjInfiniteScroll text and icons">
 </div>
 <br><br>
 
@@ -153,7 +153,7 @@ onScroll:
   IF(paginator!.getEndIndex() > -1)
     FOR i = startIndex! to endIndex!
       container! = canvas!.addChildWindow("", $00108800$, BBjAPI().getSysGui().getAvailableContext())
-      container!.setStyle("padding", "var(--bbj-space-xs) var(--bbj-space-s)")
+      container!.setStyle("padding", "var(--dwc-space-xs) var(--dwc-space-s)")
       container!.setAttribute("data-index", str(i))
       container!.addStaticText(str(i) + " - Static Text" ,$0000$)
     NEXT i
@@ -175,7 +175,7 @@ RELEASE
 
 <br><br>
 <div style="text-align: center;">
-  <img style="border:thin solid var(--bbj-color-default);" src="assets/paginater.gif" alt="BBjInfiniteScrollPaginator">
+  <img style="border:thin solid var(--dwc-color-default);" src="assets/paginater.gif" alt="BBjInfiniteScrollPaginator">
 </div>
 <br><br>
 
@@ -211,7 +211,7 @@ onScroll:
 
   FOR i = startIndex! to endIndex!
     container! = canvas!.addChildWindow("", $00108800$, BBjAPI().getSysGui().getAvailableContext())
-    container!.setStyle("padding", "var(--bbj-space-xs) var(--bbj-space-s)")
+    container!.setStyle("padding", "var(--dwc-space-xs) var(--dwc-space-s)")
     container!.setAttribute("data-index", str(i))
     container!.addStaticText(str(i) + " - Static Text" ,$0000$)
     lastIndex! = lastIndex! + 1
@@ -245,7 +245,7 @@ RELEASE
 ```
 <br><br>
 <div style="text-align: center;">
-  <img style="border:thin solid var(--bbj-color-default);" src="assets/pull-to-refresh.gif" alt="BBjInfiniteScroll And BBjPullToRefresh">
+  <img style="border:thin solid var(--dwc-color-default);" src="assets/pull-to-refresh.gif" alt="BBjInfiniteScroll And BBjPullToRefresh">
 </div>
 <br><br>
 
@@ -324,7 +324,7 @@ onScroll:
       location! = info!.addStaticText(fullLocation!)
       location!.addStyle("bookEntry__location")
 
-      call! = card!.addButton("<html><bbj-icon name=""phone""></bbj-icon></html>")
+      call! = card!.addButton("<html><dwc-icon name=""phone""></dwc-icon></html>")
       call!.setEnabled(len(phone!) > 0)
       call!.setUserData(phone!)
       call!.setCallback(call!.ON_BUTTON_PUSH, "onCall")
@@ -387,22 +387,22 @@ RELEASE
   display: flex;
   gap: 1rem;
   align-items: center;
-  padding: var(--bbj-space-s);
-  cursor: var(--bbj-cursor-click);
-  transition: background-color var(--bbj-transition);
-  border-bottom: thin solid var(--bbj-color-default) !important;
+  padding: var(--dwc-space-s);
+  cursor: var(--dwc-cursor-click);
+  transition: background-color var(--dwc-transition);
+  border-bottom: thin solid var(--dwc-color-default) !important;
 }
 
 .bookEntry:hover {
-  background-color: var(--bbj-color-primary-alt);
+  background-color: var(--dwc-color-primary-alt);
 }
 
 .bookEntry__avatar {
   display: flex;
   align-items: center;
-  width: var(--bbj-size-l);
-  height: var(--bbj-size-l);
-  border-radius: var(--bbj-border-radius-round);
+  width: var(--dwc-size-l);
+  height: var(--dwc-size-l);
+  border-radius: var(--dwc-border-radius-round);
 }
 
 .bookEntry__avatar img {
@@ -417,13 +417,13 @@ RELEASE
 }
 
 .bookEntry__location {
-  font-size: var(--bbj-font-size-s);
-  color: var(--bbj-color-default-text);
+  font-size: var(--dwc-font-size-s);
+  color: var(--dwc-color-default-text);
 }
 ```
 
 <br><br>
 <div style="text-align: center;">
-  <img style="border:thin solid var(--bbj-color-default);" src="assets/contacts-list.gif" alt="ChileCompany Customers List">
+  <img style="border:thin solid var(--dwc-color-default);" src="assets/contacts-list.gif" alt="ChileCompany Customers List">
 </div>
 <br><br>

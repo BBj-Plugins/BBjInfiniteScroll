@@ -163,7 +163,7 @@ CLASS public BBjInfiniteScroll
   REM  * @param wnd! The window instance
   REM  */
   METHOD public BBjInfiniteScroll(BBjWindow wnd!)
-    #WebComponent! = wnd!.addWebComponent("bbj-infinite-scroll")
+    #WebComponent! = wnd!.addWebComponent("dwc-infinite-scroll")
     #WebComponent!.setStyle("width","")
     #WebComponent!.setStyle("height","")
     #WebComponent!.setStyle("position","")
@@ -173,7 +173,7 @@ CLASS public BBjInfiniteScroll
     #Canvas!.setAttribute("bbj-remove", "true")
     #WebComponent!.setSlot(#Canvas!)
     handler! = new BBjInfiniteScrollEventHandler(#this!)
-    #WebComponent!.setCallback("bbj-infinite", handler!, "handleClientEvents")
+    #WebComponent!.setCallback("dwc-infinite", handler!, "handleClientEvents")
   METHODEND
   REM /**
   REM  * Get the widget's id
@@ -260,7 +260,7 @@ CLASS public BBjInfiniteScroll
   METHOD public void update()
     script! = "" +
 :    "(async () => {" +
-:    " await customElements.whenDefined('bbj-infinite-scroll');" +
+:    " await customElements.whenDefined('dwc-infinite-scroll');" +
 :    " component.completed = Boolean(" + str(#getCompleted()) + ");"+
 :    " await component.update()" +
 :    "})()"
@@ -274,7 +274,7 @@ CLASS public BBjInfiniteScroll
   REM  * @param callback! The event CALLBACK
   REM  */
   METHOD public void onScroll(String callback!)
-    BBjAPI().setCustomEventCallback(str(#this!) + "bbj-infinite", callback!)
+    BBjAPI().setCustomEventCallback(str(#this!) + "dwc-infinite", callback!)
   METHODEND
   REM /**
   REM  * Set a scroll CALLBACK
@@ -285,18 +285,18 @@ CLASS public BBjInfiniteScroll
   REM  * @param callback! The event METHOD
   REM  */
   METHOD public void onScroll(CustomObject instance!, BBjString method!)
-    BBjAPI().setCustomEventCallback(str(#this!) + "bbj-infinite", instance!, method!)
+    BBjAPI().setCustomEventCallback(str(#this!) + "dwc-infinite", instance!, method!)
   METHODEND
   REM /**
   REM  * CLEAR the scroll CALLBACK
   REM  */
   METHOD public void clearScrollCallback()
-    BBjAPI().clearCustomEventCallback(str(#this!) + "bbj-infinite")
+    BBjAPI().clearCustomEventCallback(str(#this!) + "dwc-infinite")
   METHODEND
 
 CLASSEND
 REM /**
-REM  * A CLASS which is used to handle the bbj-infinite-scroll client events.
+REM  * A CLASS which is used to handle the dwc-infinite-scroll client events.
 REM  *
 REM  * @author Hyyan Abo Fakher
 REM  */
@@ -316,8 +316,8 @@ CLASS public BBjInfiniteScrollEventHandler
     type$ = ev!.getEventType()
     payload! = new BBjInfiniteScrollEvent(#Widget!)
 
-    IF(type$ = "bbj-infinite") THEN
-      BBjAPI().postPriorityCustomEvent(str(#Widget!) + "bbj-infinite", payload!)
+    IF(type$ = "dwc-infinite") THEN
+      BBjAPI().postPriorityCustomEvent(str(#Widget!) + "dwc-infinite", payload!)
     FI
   METHODEND
 
