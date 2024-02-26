@@ -10,8 +10,8 @@
   <a href="https://github.com/necolas/issue-guidelines/blob/master/CONTRIBUTING.md#pull-requests">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs welcome!" />
   </a>
-   <a href="https://basishub.github.io/basis-next/#/dwc/bbj-infinite-scroll">
-    <img src="https://img.shields.io/badge/Component-bbj--infinite--scroll-%23006aff" alt="Tag Name">
+   <a href="https://basishub.github.io/basis-next/#/dwc/dwc-infinite-scroll">
+    <img src="https://img.shields.io/badge/Component-dwc--infinite--scroll-%23006aff" alt="Tag Name">
   </a>
 </p>
 BBjInfiniteScroll lets a user loads content continuously as the user scrolls down, eliminating the need for pagination.
